@@ -1,6 +1,6 @@
 {
   "name": "dangle-hl",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "homepage": "https://github.com/shadowsky/dangle",
   "authors": [
     "Djamel F. <djamelfel@gmail.com>"
@@ -21,8 +21,7 @@
     "test",
     "tests"
   ],
-  "devDependencies": {
+  "dependencies": {
     "d3": "3.4.12"
-  },
-  "dependencies": {}
+  }
 }
