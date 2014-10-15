@@ -1,6 +1,6 @@
 {
   "name": "dangle-hl",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/shadowsky/dangle",
   "authors": [
     "Djamel F. <djamelfel@gmail.com>"
@@ -20,5 +20,9 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "devDependencies": {
+    "d3": "3.4.12"
+  },
+  "dependencies": {}
 }
