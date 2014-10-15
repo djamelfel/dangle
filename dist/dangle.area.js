@@ -2,6 +2,8 @@
 * http://www.fullscale.co/dangle
 * Copyright (c) 2013 FullScale Labs, LLC; Licensed MIT */
 
+angular.module('dangle', []);
+
 /* 
  * Copyright (c) 2012 FullScale Labs, LLC
  *
