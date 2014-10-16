@@ -27,23 +27,23 @@
     fill-opacity: 0.2;
 }
 
-.area.fill1 {
+.area.fill0 {
     fill: #0000FF;
 }
 
-.area.fill2 {
+.area.fill1 {
     fill: #000000;
 }
 
-.area.fill3 {
+.area.fill2 {
     fill: #FF0000;
 }
 
-.area.fill4 {
+.area.fill3 {
     fill: #00FF00;
 }
 
-.area.fill5 {
+.area.fill4 {
     fill: #00FFFF;
 }
 
@@ -52,23 +52,23 @@
     fill: none;
     stroke-width: 6.0px;
 }
-.area.line1 {
+.area.line0 {
     stroke: #0000FF;
 }
 
-.area.line2 {
+.area.line1 {
     stroke: #000000;
 }
 
-.area.line3 {
+.area.line2 {
     stroke: #FF0000;
 }
 
-.area.line4 {
+.area.line3 {
     stroke: #00FF00;
 }
 
-.area.line5 {
+.area.line4 {
     stroke: #00FFFF;
 }
 
