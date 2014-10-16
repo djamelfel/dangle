@@ -154,13 +154,13 @@ angular.module('dangle')
                             // generate the area. Data is empty at link time
                             svg.append('path')
                                 .datum([])
-                                .attr('class', 'area fill' + curve_id +' ' + klass)
+                                .attr('class', 'area fill fill' + curve_id +' ' + klass)
                                 .attr('d', area);
 
                             // generate the line. Data is empty at link time
                             svg.append('path')
                                 .datum([])
-                                .attr('class', 'area line' + curve_id + ' ' + klass)
+                                .attr('class', 'area line line' + curve_id + ' ' + klass)
                                 .attr('d', line);
 
                             // use that data to build valid x,y ranges
