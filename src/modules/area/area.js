@@ -49,7 +49,7 @@ angular.module('dangle')
                 var margin = {
                     top: 20, 
                     right: 20, 
-                    bottom: 30, 
+                    bottom: 80,
                     left: 80
                 };
 
@@ -175,6 +175,18 @@ angular.module('dangle')
                             // feed the current data to our area/line generators
                             t.select('.fill' + curve_id).attr('d', area(label_charts[key]));
                             t.select('.line' + curve_id).attr('d', line(label_charts[key]));
+
+                            svg.append('circle')
+                                .attr('cx', curve_id*100)
+                                .attr('cy', 250)
+                                .attr('r', 8)
+                                .attr('class', 'curve' + curve_id);
+
+                            svg.append('text')
+                                .attr('x', curve_id*100+12)
+                                .attr('y', 255)
+                                .attr('class', 'curve' + curve_id)
+                                .text(key);
 
                             // does the user want data points to be plotted
                             if (dataPoints == 'true') {
