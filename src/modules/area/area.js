@@ -154,13 +154,13 @@ angular.module('dangle')
                             // generate the area. Data is empty at link time
                             svg.append('path')
                                 .datum([])
-                                .attr('class', 'area fill fill' + curve_id +' ' + klass)
+                                .attr('class', 'fill fill' + curve_id + ' curve' + curve_id + ' ' + klass)
                                 .attr('d', area);
 
                             // generate the line. Data is empty at link time
                             svg.append('path')
                                 .datum([])
-                                .attr('class', 'area line line' + curve_id + ' ' + klass)
+                                .attr('class', 'line line' + curve_id + ' curve' + curve_id + ' ' + klass)
                                 .attr('d', line);
 
                             // use that data to build valid x,y ranges
@@ -174,7 +174,7 @@ angular.module('dangle')
 
                             // feed the current data to our area/line generators
                             t.select('.fill' + curve_id).attr('d', area(label_charts[key]));
-                            t.select('.'+ 'line' + curve_id).attr('d', line(label_charts[key]));
+                            t.select('.line' + curve_id).attr('d', line(label_charts[key]));
 
                             // does the user want data points to be plotted
                             if (dataPoints == 'true') {
