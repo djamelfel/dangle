@@ -1,5 +1,5 @@
-/*! dangle - v1.0.0 - 2013-03-02
+/*! dangle - v1.0.0 - 2014-10-17
 * http://www.fullscale.co/dangle
-* Copyright (c) 2013 FullScale Labs, LLC; Licensed MIT */
+* Copyright (c) 2014 FullScale Labs, LLC; Licensed MIT */
 
 angular.module('dangle', []);

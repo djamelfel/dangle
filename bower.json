@@ -1,0 +1,28 @@
+{
+  "name": "dangle-hl",
+  "version": "1.0.5",
+  "homepage": "https://github.com/shadowsky/dangle",
+  "authors": [
+    "Djamel F. <djamelfel@gmail.com>"
+  ],
+  "description": "A set of AngularJS directives that provide common visualizations based on D3",
+  "keywords": [
+    "dangle",
+    "charts",
+    "graphs",
+    "angular",
+    "angularjs"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": ">= 3.4.10",
+    "dangle-hl": "*"
+  }
+}
