@@ -22,20 +22,43 @@
     font-size: 16px;
 }
 
+.curve0 {
+    fill: #0000FF;
+    stroke: #0000FF;
+}
+
+.curve1 {
+    fill: #000000;
+    stroke: #000000;
+}
+
+.curve2 {
+    fill: #FF0000;
+    stroke: #FF0000;
+}
+
+.curve3 {
+    fill: #00FF00;
+    stroke: #00FF00;
+}
+
+.curve4 {
+    fill: #00FFFF;
+    stroke: #00FFFF;
+}
+
 /* controls the area */
-.area.fill { 
-    fill: #e5f3f9;
+.fill {
     fill-opacity: 0.2;
 }
 
 /* controls the top line in area */
-.area.line {
+.line {
     fill: none;
-    stroke: #058dc7;
     stroke-width: 6.0px;
 }
 
-.area.line.points {
+.line.points {
     fill: #058dc7;
     stroke: #fff;
     stroke-width: 3.0px;

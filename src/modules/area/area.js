@@ -24,7 +24,7 @@
  */
 
 angular.module('dangle')
-    .directive('fsArea', [function() {
+    .directive('fsArea', ['$compile', function($compile) {
         'use strict';
 
         return {
@@ -36,6 +36,8 @@ angular.module('dangle')
                 width:       '=',
                 height:      '=',
                 bind:        '=',
+                xmax:        '=',
+                xmin:        '=',
                 label:       '@',
                 field:       '@',
                 duration:    '@',
@@ -49,7 +51,7 @@ angular.module('dangle')
                 var margin = {
                     top: 20, 
                     right: 20, 
-                    bottom: 30, 
+                    bottom: 80,
                     left: 80
                 };
 
@@ -67,7 +69,7 @@ angular.module('dangle')
                 width = width - margin.left - margin.right;
                 height = height - margin.top - margin.bottom;
 
-                // create x,y sclaes (x is inferred as time)
+                // create x,y scales (x is inferred as time)
                 var x = d3.time.scale()
                     .range([0, width]);
 
@@ -108,19 +110,13 @@ angular.module('dangle')
                         .append('g')
                             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-                // generate the area. Data is empty at link time
-                svg.append('path')
-                    .datum([])
-                    .attr('class', 'area fill ' + klass)
-                    .attr('d', area);
-
                 // insert the x axis (no data yet)
                 svg.append('g')
                     .attr('class', 'area x axis ' + klass)
                     .attr('transform', 'translate(0,' + height + ')')
                     .call(xAxis);
 
-                // insert the x axis (no data yet)
+                // insert the y axis (no data yet)
                 svg.append('g')
                     .attr('class', 'area y axis ' + klass)
                     .call(yAxis)
@@ -130,13 +126,6 @@ angular.module('dangle')
                             .attr('dy', '.71em')
                             .style('text-anchor', 'end')
                             .text(label);
-
-                // generate the line. Data is empty at link time
-                svg.append('path')
-                    .datum([])
-                    .attr('class', 'area line ' + klass)
-                    .attr("d", line);
-
 
                 // main observer fn called when scope is updated. Data and scope vars are now bound
                 scope.$watch('bind', function(data) {
@@ -148,67 +137,127 @@ angular.module('dangle')
                     var pointRadius = scope.pointRadius || 8;
                     var field = scope.field || attrs.bind.split('.').pop().toLowerCase();
 
+                    //remove element if they are
+                    svg.selectAll(".curve")
+                        .remove();
+
                     // just because scope is bound doesn't imply we have data.
-                    if (data) {
+                    if (data === undefined) {
+                    }
+                    else if (data.length != 0) {
 
                         // pull the data array from the facet
                         data = data.entries || [];
 
-                        // use that data to build valid x,y ranges
-                        x.domain(d3.extent(data, function(d) { return d.time; }));
-                        y.domain([0, d3.max(data, function(d) { return d.count; })]);
-
-                        // create the transition 
-                        var t = svg.transition().duration(duration);
-
-                        // feed the current data to our area/line generators
-                        t.select('.area').attr('d', area(data));
-                        t.select('.line').attr('d', line(data));
-
-                        // does the user want data points to be plotted
-                        if (dataPoints == 'true') {
-
-                            // create svg circle for each data point
-                            // using Math.random as (optional) key fn ensures old
-                            // data values are flushed and all new values inserted
-                            var points = svg.selectAll('circle')
-                                .data(data.filter(function(d) { 
-                                    return d.count; 
-                                }), function(d) { 
-                                    return Math.random(); 
-                                });
-
-                            // d3 enter fn binds each new value to a circle 
-                            points.enter()
-                                .append('circle')
-                                    .attr('class', 'area line points ' + klass)
-                                    .attr('cursor', 'pointer')
-                                    .attr("cx", line.x())
-                                    .attr("cy", line.y())
-                                    .style("opacity", 0)
-                                    .transition()
-                                        .duration(duration)
-                                        .style("opacity", 1)
-                                        .attr("cx", line.x())
-                                        .attr("cy", line.y())
-                                        .attr("r", pointRadius);
-
-                            // wire up any events (registers filter callback)
-                            points.on('mousedown', function(d) { 
-                                scope.$apply(function() {
-                                    (scope.onClick || angular.noop)(field, d.time);
-                                });
-                            });
-
-                            // d3 exit/remove flushes old values (removes old circles)
-                            points.exit().remove();
+                        var label_charts = {};
+                        for (var i=0; i<data.length; i++) {
+                            if (label_charts[data[i].label] === undefined) {
+                                label_charts[data[i].label] = [];
+                            }
+                            label_charts[data[i].label].push(data[i]);
                         }
 
+                        var curve_id = 0;
+                        for (var key in label_charts) {
+
+                            // generate the area. Data is empty at link time
+                            var curve = svg.append('g')
+                                .attr('class', 'curve curve' + curve_id);
+
+                            var dg_group = curve.append('g')
+                                .attr('ng-init', 'sh' + curve_id + '=true')
+                                .attr('ng-show', 'sh' + curve_id);
+
+                            dg_group.append('path')
+                                .datum([])
+                                .attr('class', 'fill ' + klass)
+                                .attr('d', area);
+
+                            // generate the line. Data is empty at link time
+                            dg_group.append('path')
+                                .datum([])
+                                .attr('class', 'line ' + klass)
+                                .attr('d', line);
+
+                            // use that data to build valid x,y ranges
+                            var xmin = scope.xmin || d3.min(data, function(d) { return d.time; });
+                            var xmax = scope.xmax || d3.max(data, function(d) { return d.time; });
+                            x.domain([xmin, xmax]);
+
+                            var ymin = d3.min(data, function(d) { return d.count; });
+                            ymin < 0 ? ymin : ymin = 0;
+                            y.domain([ymin, d3.max(data, function(d) { return d.count; })]);
+
+                            // create the transition
+                            var t = curve.transition().duration(duration);
+
+                            // feed the current data to our area/line generators
+                            t.select('.fill').attr('d', area(label_charts[key]));
+                            t.select('.line').attr('d', line(label_charts[key]));
+
+                            dg_group = curve.append('g')
+                                .attr('ng-click', 'sh' + curve_id + ' = !sh' + curve_id)
+                                .attr('class', 'pointer');
+
+                            var width_label = 150;
+                            dg_group.append('circle')
+                                .attr('cx', curve_id * width_label)
+                                .attr('cy', 250)
+                                .attr('r', 8)
+
+                            dg_group.append('text')
+                                .attr('x', curve_id * width_label + 12)
+                                .attr('y', 255)
+                                .text(key);
+
+                            // does the user want data points to be plotted
+                            if (dataPoints == 'true') {
+
+                                // create svg circle for each data point
+                                // using Math.random as (optional) key fn ensures old
+                                // data values are flushed and all new values inserted
+                                var points = svg.selectAll('circle')
+                                    .data(data.filter(function(d) {
+                                        return d.count;
+                                    }), function(d) {
+                                        return Math.random();
+                                    });
+
+                                // d3 enter fn binds each new value to a circle
+                                points.enter()
+                                    .append('circle')
+                                        .attr('class', 'area line points ' + klass)
+                                        .attr('cursor', 'pointer')
+                                        .attr("cx", line.x())
+                                        .attr("cy", line.y())
+                                        .style("opacity", 0)
+                                        .transition()
+                                            .duration(duration)
+                                            .style("opacity", 1)
+                                            .attr("cx", line.x())
+                                            .attr("cy", line.y())
+                                            .attr("r", pointRadius);
+
+                                // wire up any events (registers filter callback)
+                                points.on('mousedown', function(d) {
+                                    scope.$apply(function() {
+                                        (scope.onClick || angular.noop)(field, d.time);
+                                    });
+                                });
+
+                                // d3 exit/remove flushes old values (removes old circles)
+                                points.exit().remove();
+                            }
+
+                            curve_id++;
+                        }
                         // update our x,y axis based on new data values
+                        var t = svg.transition().duration(duration);
                         t.select('.x').call(xAxis);
                         t.select('.y').call(yAxis);
-
                     }
+
+                    $compile(element.contents())(scope);
                 }, true)
             }
         };
