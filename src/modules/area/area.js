@@ -192,7 +192,7 @@ angular.module('dangle')
                             t.select('.line').attr('d', line(label_charts[key]));
 
                             dg_group = curve.append('g')
-                                .attr('ng-click', 'sh' + curve_id + '= !sh' + curve_id)
+                                .attr('ng-click', 'sh' + curve_id + ' = !sh' + curve_id)
                                 .attr('class', 'pointer');
 
                             var width_label = 150;
@@ -200,12 +200,10 @@ angular.module('dangle')
                                 .attr('cx', curve_id * width_label)
                                 .attr('cy', 250)
                                 .attr('r', 8)
-                                .attr('class', 'circle curve' + curve_id);
 
                             dg_group.append('text')
                                 .attr('x', curve_id * width_label + 12)
                                 .attr('y', 255)
-                                .attr('class', 'text curve' + curve_id)
                                 .text(key);
 
                             // does the user want data points to be plotted
