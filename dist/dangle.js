@@ -118,13 +118,13 @@ angular.module('dangle')
 
                 // insert the x axis (no data yet)
                 svg.append('g')
-                    .attr('class', 'area x axis ' + klass)
+                    .attr('class', 'x dg-axis ' + klass)
                     .attr('transform', 'translate(0,' + height + ')')
                     .call(xAxis);
 
                 // insert the y axis (no data yet)
                 svg.append('g')
-                    .attr('class', 'area y axis ' + klass)
+                    .attr('class', 'y dg-axis ' + klass)
                     .call(yAxis)
                         .append('text')
                             .attr('transform', 'rotate(-90)')
@@ -168,7 +168,7 @@ angular.module('dangle')
 
                             // generate the area. Data is empty at link time
                             var curve = svg.append('g')
-                                .attr('class', 'curve curve' + curve_id);
+                                .attr('class', 'curve dg-curve' + curve_id);
 
                             var dg_group = curve.append('g')
                                 .attr('ng-init', 'sh' + curve_id + '=true')
@@ -176,13 +176,13 @@ angular.module('dangle')
 
                             dg_group.append('path')
                                 .datum([])
-                                .attr('class', 'fill ' + klass)
+                                .attr('class', 'dg-fill ' + klass)
                                 .attr('d', area);
 
                             // generate the line. Data is empty at link time
                             dg_group.append('path')
                                 .datum([])
-                                .attr('class', 'line ' + klass)
+                                .attr('class', 'dg-line ' + klass)
                                 .attr('d', line);
 
                             // use that data to build valid x,y ranges
@@ -198,8 +198,8 @@ angular.module('dangle')
                             var t = curve.transition().duration(duration);
 
                             // feed the current data to our area/line generators
-                            t.select('.fill').attr('d', area(label_charts[key]));
-                            t.select('.line').attr('d', line(label_charts[key]));
+                            t.select('.dg-fill').attr('d', area(label_charts[key]));
+                            t.select('.dg-line').attr('d', line(label_charts[key]));
 
                             dg_group = curve.append('g')
                                 .attr('ng-click', 'sh' + curve_id + ' = !sh' + curve_id)
@@ -222,7 +222,7 @@ angular.module('dangle')
                                 // create svg circle for each data point
                                 // using Math.random as (optional) key fn ensures old
                                 // data values are flushed and all new values inserted
-                                var points = svg.selectAll('circle')
+                                var points = svg.selectAll('.circle')
                                     .data(data.filter(function(d) {
                                         return d.count;
                                     }), function(d) {
@@ -232,8 +232,7 @@ angular.module('dangle')
                                 // d3 enter fn binds each new value to a circle
                                 points.enter()
                                     .append('circle')
-                                        .attr('class', 'area line points ' + klass)
-                                        .attr('cursor', 'pointer')
+                                        .attr('class', 'pointer circle dg-line dg-points ' + klass)
                                         .attr("cx", line.x())
                                         .attr("cy", line.y())
                                         .style("opacity", 0)
