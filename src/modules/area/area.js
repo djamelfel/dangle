@@ -36,6 +36,8 @@ angular.module('dangle')
                 width:       '=',
                 height:      '=',
                 bind:        '=',
+                xmax:        '=',
+                xmin:        '=',
                 label:       '@',
                 field:       '@',
                 duration:    '@',
@@ -178,7 +180,9 @@ angular.module('dangle')
                                 .attr('d', line);
 
                             // use that data to build valid x,y ranges
-                            x.domain(d3.extent(data, function(d) { return d.time; }));
+                            var xmin = scope.xmin || d3.min(data, function(d) { return d.time; });
+                            var xmax = scope.xmax || d3.max(data, function(d) { return d.time; });
+                            x.domain([xmin, xmax]);
 
                             var ymin = d3.min(data, function(d) { return d.count; });
                             ymin < 0 ? ymin : ymin = 0;
@@ -247,7 +251,6 @@ angular.module('dangle')
 
                             curve_id++;
                         }
-
                         // update our x,y axis based on new data values
                         var t = svg.transition().duration(duration);
                         t.select('.x').call(xAxis);
