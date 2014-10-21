@@ -1,6 +1,6 @@
-/*! dangle - v1.0.0 - 2013-03-02
+/*! dangle - v1.0.0 - 2014-10-21
 * http://www.fullscale.co/dangle
-* Copyright (c) 2013 FullScale Labs, LLC; Licensed MIT */
+* Copyright (c) 2014 FullScale Labs, LLC; Licensed MIT */
 
 /* 
  * Copyright (c) 2012 FullScale Labs, LLC
@@ -177,7 +177,15 @@ angular.module('dangle')
                                     });
 
                             // run the transition
-                            path.transition().duration(duration).attrTween('d', arcTween);
+                            path
+                                .style('fill', function(d) { return color(d.data.term); })
+                            .transition()
+                                .duration(duration)
+                                .attrTween('d', arcTween)
+                                .style('fill', function(d) { return color(d.data.term); });
+
+                            // remove arcs not in the dataset
+                            path.exit().remove();
 
                             // update the label ticks
                             var ticks = labels.selectAll('line').data(pieData);
