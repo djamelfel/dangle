@@ -1,13 +1,13 @@
 /* axis line test */
-.axis path { 
-    fill: none; 
-    stroke:#000; 
-    stroke-width: 1.5px; 
+.dg-axis path {
+    fill: none;
+    stroke:#000;
+    stroke-width: 1.5px;
     shape-rendering: crispEdges;
 }
 
 /* axis tick marks */
-.axis line {
+.dg-axis line {
     fill: none;
     stroke: #000;
     stroke-width: 1.1px;
@@ -15,50 +15,50 @@
 }
 
 /* controls the axis text */
-.axis text {
+.dg-axis text {
     fill: #333;
     stroke: none;
     shape-rendering: crispEdges;
     font-size: 16px;
 }
 
-.curve0 {
+.dg-curve0 {
     fill: #0000FF;
     stroke: #0000FF;
 }
 
-.curve1 {
+.dg-curve1 {
     fill: #000000;
     stroke: #000000;
 }
 
-.curve2 {
+.dg-curve2 {
     fill: #FF0000;
     stroke: #FF0000;
 }
 
-.curve3 {
+.dg-curve3 {
     fill: #00FF00;
     stroke: #00FF00;
 }
 
-.curve4 {
+.dg-curve4 {
     fill: #00FFFF;
     stroke: #00FFFF;
 }
 
 /* controls the area */
-.fill {
+.dg-fill {
     fill-opacity: 0.2;
 }
 
 /* controls the top line in area */
-.line {
+.dg-line {
     fill: none;
     stroke-width: 6.0px;
 }
 
-.line.points {
+.dg-line.points {
     fill: #058dc7;
     stroke: #fff;
     stroke-width: 3.0px;
