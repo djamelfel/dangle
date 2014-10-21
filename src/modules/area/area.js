@@ -24,7 +24,7 @@
  */
 
 angular.module('dangle')
-    .directive('fsArea', [function() {
+    .directive('fsArea', ['$compile', function($compile) {
         'use strict';
 
         return {
@@ -49,7 +49,7 @@ angular.module('dangle')
                 var margin = {
                     top: 20, 
                     right: 20, 
-                    bottom: 30, 
+                    bottom: 80,
                     left: 80
                 };
 
@@ -162,13 +162,17 @@ angular.module('dangle')
                             var curve = svg.append('g')
                                 .attr('class', 'curve curve' + curve_id);
 
-                            curve.append('path')
+                            var dg_group = curve.append('g')
+                                .attr('ng-init', 'sh' + curve_id + '=true')
+                                .attr('ng-show', 'sh' + curve_id);
+
+                            dg_group.append('path')
                                 .datum([])
                                 .attr('class', 'fill ' + klass)
                                 .attr('d', area);
 
                             // generate the line. Data is empty at link time
-                            curve.append('path')
+                            dg_group.append('path')
                                 .datum([])
                                 .attr('class', 'line ' + klass)
                                 .attr('d', line);
@@ -186,6 +190,23 @@ angular.module('dangle')
                             // feed the current data to our area/line generators
                             t.select('.fill').attr('d', area(label_charts[key]));
                             t.select('.line').attr('d', line(label_charts[key]));
+
+                            dg_group = curve.append('g')
+                                .attr('ng-click', 'sh' + curve_id + '= !sh' + curve_id)
+                                .attr('class', 'pointer');
+
+                            var width_label = 150;
+                            dg_group.append('circle')
+                                .attr('cx', curve_id * width_label)
+                                .attr('cy', 250)
+                                .attr('r', 8)
+                                .attr('class', 'circle curve' + curve_id);
+
+                            dg_group.append('text')
+                                .attr('x', curve_id * width_label + 12)
+                                .attr('y', 255)
+                                .attr('class', 'text curve' + curve_id)
+                                .text(key);
 
                             // does the user want data points to be plotted
                             if (dataPoints == 'true') {
@@ -234,6 +255,8 @@ angular.module('dangle')
                         t.select('.x').call(xAxis);
                         t.select('.y').call(yAxis);
                     }
+
+                    $compile(element.contents())(scope);
                 }, true)
             }
         };
